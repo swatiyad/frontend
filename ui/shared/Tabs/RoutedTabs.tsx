@@ -6,6 +6,9 @@ import React, { useEffect, useRef } from 'react';
 
 import type { RoutedTab } from './types';
 
+import { useApiQueries } from 'lib/api/useApiQuery';
+import TabsSkeleton from 'ui/shared/Tabs/TabsSkeleton';
+
 import TabsWithScroll from './TabsWithScroll';
 import useTabIndexFromQuery from './useTabIndexFromQuery';
 
@@ -17,12 +20,15 @@ interface Props extends ThemingProps<'Tabs'> {
   stickyEnabled?: boolean;
   className?: string;
   onTabChange?: (index: number) => void;
+  isLoading?: boolean;
 }
 
-const RoutedTabs = ({ tabs, tabListProps, rightSlot, rightSlotProps, stickyEnabled, className, onTabChange, ...themeProps }: Props) => {
+const RoutedTabs = ({ tabs, tabListProps, rightSlot, rightSlotProps, stickyEnabled, className, onTabChange, isLoading, ...themeProps }: Props) => {
   const router = useRouter();
   const tabIndex = useTabIndexFromQuery(tabs);
   const tabsRef = useRef<HTMLDivElement>(null);
+
+  useApiQueries(tabs[tabIndex].prefetchQueries || []);
 
   const handleTabChange = React.useCallback((index: number) => {
     const nextTab = tabs[index];
@@ -53,6 +59,10 @@ const RoutedTabs = ({ tabs, tabListProps, rightSlot, rightSlotProps, stickyEnabl
   // replicate componentDidMount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isLoading) {
+    return <TabsSkeleton tabs={ tabs }/>;
+  }
 
   return (
     <TabsWithScroll

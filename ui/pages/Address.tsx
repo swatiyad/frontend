@@ -1,10 +1,12 @@
 import { Box, Flex, HStack, useColorModeValue } from '@chakra-ui/react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React from 'react';
 
 import type { RoutedTab } from 'ui/shared/Tabs/types';
 
 import config from 'configs/app';
+import type { ResourceName } from 'lib/api/resources';
 import useApiQuery from 'lib/api/useApiQuery';
 import { useAppContext } from 'lib/contexts/app';
 import useContractTabs from 'lib/hooks/useContractTabs';
@@ -16,7 +18,7 @@ import AddressAccountHistory from 'ui/address/AddressAccountHistory';
 import AddressBlocksValidated from 'ui/address/AddressBlocksValidated';
 import AddressCoinBalance from 'ui/address/AddressCoinBalance';
 import AddressContract from 'ui/address/AddressContract';
-import AddressDetails from 'ui/address/AddressDetails';
+// import AddressDetails from 'ui/address/AddressDetails';
 import AddressInternalTxs from 'ui/address/AddressInternalTxs';
 import AddressLogs from 'ui/address/AddressLogs';
 import AddressTokens from 'ui/address/AddressTokens';
@@ -39,7 +41,8 @@ import IconSvg from 'ui/shared/IconSvg';
 import NetworkExplorers from 'ui/shared/NetworkExplorers';
 import PageTitle from 'ui/shared/Page/PageTitle';
 import RoutedTabs from 'ui/shared/Tabs/RoutedTabs';
-import TabsSkeleton from 'ui/shared/Tabs/TabsSkeleton';
+
+const AddressDetails = dynamic(() => import('ui/address/AddressDetails'), { ssr: false });
 
 const TOKEN_TABS = [ 'tokens_erc20', 'tokens_nfts', 'tokens_nfts_collection', 'tokens_nfts_list' ];
 
@@ -75,6 +78,9 @@ const AddressPageContent = () => {
 
   const contractTabs = useContractTabs(addressQuery.data);
 
+  //FIXME
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore:
   const tabs: Array<RoutedTab> = React.useMemo(() => {
     return [
       {
@@ -82,12 +88,14 @@ const AddressPageContent = () => {
         title: 'Transactions',
         count: addressTabsCountersQuery.data?.transactions_count,
         component: <AddressTxs scrollRef={ tabsScrollRef }/>,
+        prefetchQueries: [ { resource: 'address_txs' as ResourceName, params: { pathParams: { hash } } } ],
       },
       txInterpretation.isEnabled && txInterpretation.provider === 'noves' ?
         {
           id: 'account_history',
           title: 'Account history',
           component: <AddressAccountHistory scrollRef={ tabsScrollRef }/>,
+          prefetchQueries: [ { resource: 'noves_address_history' as ResourceName, params: { pathParams: { address: hash } } } ],
         } :
         undefined,
       config.features.userOps.isEnabled && Boolean(userOpsAccountQuery.data?.total_ops) ?
@@ -96,6 +104,7 @@ const AddressPageContent = () => {
           title: 'User operations',
           count: userOpsAccountQuery.data?.total_ops,
           component: <AddressUserOps/>,
+          prefetchQueries: [ { resource: 'user_ops', params: { queryParams: { sender: hash } } } ],
         } :
         undefined,
       config.features.beaconChain.isEnabled && addressTabsCountersQuery.data?.withdrawals_count ?
@@ -104,6 +113,8 @@ const AddressPageContent = () => {
           title: 'Withdrawals',
           count: addressTabsCountersQuery.data?.withdrawals_count,
           component: <AddressWithdrawals scrollRef={ tabsScrollRef }/>,
+          prefetchQueries: [ { resource: 'address_withdrawals' as ResourceName, params: { pathParams: { hash } } } ],
+
         } :
         undefined,
       {
@@ -111,6 +122,7 @@ const AddressPageContent = () => {
         title: 'Token transfers',
         count: addressTabsCountersQuery.data?.token_transfers_count,
         component: <AddressTokenTransfers scrollRef={ tabsScrollRef }/>,
+        // address_token_transfers
       },
       {
         id: 'tokens',
@@ -164,7 +176,7 @@ const AddressPageContent = () => {
         subTabs: contractTabs.map(tab => tab.id),
       } : undefined,
     ].filter(Boolean);
-  }, [ addressQuery.data, contractTabs, addressTabsCountersQuery.data, userOpsAccountQuery.data ]);
+  }, [ addressQuery.data, contractTabs, addressTabsCountersQuery.data, userOpsAccountQuery.data, hash ]);
 
   const isLoading = addressQuery.isPlaceholderData || (config.features.userOps.isEnabled && userOpsAccountQuery.isPlaceholderData);
 
@@ -183,7 +195,9 @@ const AddressPageContent = () => {
     />
   );
 
-  const content = (addressQuery.isError || addressQuery.isDegradedData) ? null : <RoutedTabs tabs={ tabs } tabListProps={{ mt: 8 }}/>;
+  const content = (addressQuery.isError || addressQuery.isDegradedData) ?
+    null :
+    <RoutedTabs tabs={ tabs } tabListProps={{ mt: 8 }} isLoading={ isLoading || addressTabsCountersQuery.isPlaceholderData }/>;
 
   const backLink = React.useMemo(() => {
     const hasGoBackLink = appProps.referrer && appProps.referrer.includes('/accounts');
@@ -250,10 +264,7 @@ const AddressPageContent = () => {
       <AddressDetails addressQuery={ addressQuery } scrollRef={ tabsScrollRef }/>
       { /* should stay before tabs to scroll up with pagination */ }
       <Box ref={ tabsScrollRef }></Box>
-      { (isLoading || addressTabsCountersQuery.isPlaceholderData) ?
-        <TabsSkeleton tabs={ tabs }/> :
-        content
-      }
+      { content }
     </>
   );
 };
