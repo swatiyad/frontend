@@ -132,6 +132,7 @@ export function app(): CspDev.DirectiveDescriptor {
 
     'frame-ancestors': [
       KEY_WORDS.SELF,
+      'isstuev.github.io',
     ],
 
     ...((() => {
