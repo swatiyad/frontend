@@ -14,6 +14,7 @@ export interface Address extends UserTags {
   creation_tx_hash: string | null;
   exchange_rate: string | null;
   ens_domain_name: string | null;
+  filecoin?: AddressFilecoinParams;
   // TODO: if we are happy with tabs-counters method, should we delete has_something fields?
   has_beacon_chain_withdrawals?: boolean;
   has_decompiled_code: boolean;
@@ -245,3 +246,27 @@ export type AddressMudRecord = {
   schema: MudWorldSchema;
   table: MudWorldTable;
 }
+
+export type AddressFilecoinParams = {
+  actor_type: FilecoinActorType;
+  id: string;
+  robust: string;
+}
+
+export type FilecoinActorType =
+  'account' |
+  'cron' |
+  'datacap' |
+  'eam' |
+  'ethaccount' |
+  'evm' |
+  'init' |
+  'market' |
+  'miner' |
+  'multisig' |
+  'paych' |
+  'placeholder' |
+  'power' |
+  'reward' |
+  'system' |
+  'verifreg';
