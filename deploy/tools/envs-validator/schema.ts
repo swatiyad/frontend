@@ -24,6 +24,7 @@ import type { NavItemExternal, NavigationLinkId, NavigationLayout } from '../../
 import { ROLLUP_TYPES } from '../../../types/client/rollup';
 import type { BridgedTokenChain, TokenBridge } from '../../../types/client/token';
 import { PROVIDERS as TX_INTERPRETATION_PROVIDERS } from '../../../types/client/txInterpretation';
+import type { UserProfileAPIConfig } from '../../../types/client/userProfileAPIConfig';
 import { VALIDATORS_CHAIN_TYPE } from '../../../types/client/validators';
 import type { ValidatorsChainType } from '../../../types/client/validators';
 import type { WalletType } from '../../../types/client/wallets';
@@ -803,6 +804,20 @@ const schema = yup
         ),
       }),
     NEXT_PUBLIC_SAVE_ON_GAS_ENABLED: yup.boolean(),
+    NEXT_PUBLIC_USER_PROFILE_API: yup
+      .mixed()
+      .test('shape', 'Invalid schema were provided for NEXT_PUBLIC_USER_PROFILE_API, it should have api_url_template', (data) => {
+        const isUndefined = data === undefined;
+        const valueSchema = yup.object<UserProfileAPIConfig>().transform(replaceQuotes).json().shape({
+          api_url_template: yup.string().required(),
+          tag_link_template: yup.string(),
+          tag_icon: yup.string(),
+          tag_bg_color: yup.string(),
+          tag_text_color: yup.string(),
+        });
+
+        return isUndefined || valueSchema.isValidSync(data);
+      }),
 
     // 6. External services envs
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: yup.string(),
