@@ -1,5 +1,5 @@
 import config from 'configs/app';
-import NavigationDesktop from 'ui/snippets/navigation/vertical/NavigationDesktop';
+import NavigationDesktop from 'ui/snippets/navigation/horizontal/NavigationDesktop';
 
 const EmptyComponent = () => null;
 

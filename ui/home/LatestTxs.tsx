@@ -1,4 +1,4 @@
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, CardFooter, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 import { route } from 'nextjs-routes';
@@ -31,6 +31,8 @@ const LatestTransactions = () => {
 
   if (data) {
     const txsUrl = route({ pathname: '/txs' });
+    const bgColor = useColorModeValue('#E9EAEC', 'black');
+    const textColor =useColorModeValue('#000', '#fff')
     return (
       <>
         <SocketNewItemsNotice borderBottomRadius={ 0 } url={ txsUrl } num={ num } alert={ socketAlert } isLoading={ isPlaceholderData }/>
@@ -44,7 +46,8 @@ const LatestTransactions = () => {
           ))) }
         </Box>
         <AddressHighlightProvider>
-          <Box mb={ 3 } display={{ base: 'none', lg: 'block' }}>
+          <Box mb={ 3 } display={{ base: 'none', lg: 'block' }} maxHeight="416px"   
+        overflowY="auto">
             { data.slice(0, txsCount).map(((tx, index) => (
               <LatestTxsItem
                 key={ tx.hash + (isPlaceholderData ? index : '') }
@@ -54,9 +57,21 @@ const LatestTransactions = () => {
             ))) }
           </Box>
         </AddressHighlightProvider>
-        <Flex justifyContent="center">
-          <LinkInternal fontSize="sm" href={ txsUrl }>View all transactions</LinkInternal>
+        <CardFooter borderTopWidth={'1px'} p={2}>
+        <Flex  
+         bg={bgColor} 
+         width={'100%'}
+         justifyItems={'center'}
+         boxShadow="sm" 
+         borderRadius="3px"
+         justifyContent="center"
+         p={2}
+         >
+          <LinkInternal fontSize="sm" textAlign={'center'} width={'100%'} 
+          color={textColor}
+          href={ txsUrl }>View all transactions</LinkInternal>
         </Flex>
+        </CardFooter>
       </>
     );
   }

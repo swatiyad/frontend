@@ -24,6 +24,9 @@ const Stats = () => {
       placeholderData: HOMEPAGE_STATS,
     },
   });
+  // Add console logs here
+  console.log('Data:', data);
+  console.log('Latest Batch Data:', data);
 
   React.useEffect(() => {
     if (!isPlaceholderData && !data?.gas_prices?.average) {

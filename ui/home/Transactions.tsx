@@ -1,4 +1,4 @@
-import { Heading } from '@chakra-ui/react';
+import { Box, Card, CardHeader, Heading, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 import config from 'configs/app';
@@ -15,6 +15,7 @@ const rollupFeature = config.features.rollup;
 const TAB_LIST_PROPS = {
   mb: { base: 3, lg: 3 },
 };
+
 
 const TransactionsHome = () => {
   const hasAccount = useHasAccount();
@@ -34,11 +35,24 @@ const TransactionsHome = () => {
       </>
     );
   }
-
+  const borderTheme = useColorModeValue('#eee', '#333');
   return (
     <>
-      <Heading as="h4" size="sm" mb={ 3 }>Latest transactions</Heading>
+      <Card
+      borderWidth="1px"           
+      borderRadius="md"           
+      boxShadow="md"
+      borderColor={borderTheme}             
+      // p={4}
+      flexShrink={0}  
+      
+        
+      >
+     <CardHeader borderBottomWidth={'1px'}>
+       <Heading as="h5" size="sm" fontWeight={'bold'} mb={ 0 }>Latest transactions</Heading>
+     </CardHeader>
       <LatestTxs/>
+      </Card>
     </>
   );
 };

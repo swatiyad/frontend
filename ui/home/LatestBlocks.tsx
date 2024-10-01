@@ -1,4 +1,15 @@
-import { chakra, Box, Heading, Flex, Text, VStack, Skeleton } from '@chakra-ui/react';
+import { chakra, Box, Heading, Flex, VStack,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Text,
+  Skeleton,
+  CardHeader,
+  Card,
+  CardFooter,
+  useColorModeValue, } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 import React from 'react';
@@ -25,9 +36,9 @@ const LatestBlocks = () => {
   // const blocksMaxCount = isMobile ? 2 : 3;
   let blocksMaxCount: number;
   if (config.features.rollup.isEnabled || config.UI.views.block.hiddenFields?.total_reward) {
-    blocksMaxCount = isMobile ? 4 : 5;
+    blocksMaxCount = isMobile ? 4 : 7;
   } else {
-    blocksMaxCount = isMobile ? 2 : 3;
+    blocksMaxCount = isMobile ? 2 : 7;
   }
   const { data, isPlaceholderData, isError } = useApiQuery('homepage_blocks', {
     queryOptions: {
@@ -71,13 +82,15 @@ const LatestBlocks = () => {
   if (isError) {
     content = <Text>No data. Please reload the page.</Text>;
   }
-
+  const borderTheme = useColorModeValue('#eee', '#333');
   if (data) {
     const dataToShow = data.slice(0, blocksMaxCount);
+    const bgColor = useColorModeValue('#E9EAEC', 'black');
+    const textColor =useColorModeValue('#000', '#fff')
 
     content = (
       <>
-        <VStack spacing={ 2 } mb={ 3 } overflow="hidden" alignItems="stretch">
+        {/* <VStack spacing={ 2 } mb={ 3 } overflow="hidden" alignItems="stretch">
           <AnimatePresence initial={ false } >
             { dataToShow.map(((block, index) => (
               <LatestBlocksItem
@@ -87,17 +100,56 @@ const LatestBlocks = () => {
               />
             ))) }
           </AnimatePresence>
-        </VStack>
-        <Flex justifyContent="center">
-          <LinkInternal fontSize="sm" href={ route({ pathname: '/blocks' }) }>View all blocks</LinkInternal>
+        </VStack> */}
+      <Box height="445px"   
+        overflowY="auto" >
+        <Table variant="unstyled">        
+          <Tbody>
+            <AnimatePresence initial={false}>
+              {data.map((block, index) => (
+                <LatestBlocksItem key={block.height + (isPlaceholderData ? String(index) : '')}
+                block={block} 
+                isLoading={isPlaceholderData} 
+                />
+              ))}
+            </AnimatePresence>
+          </Tbody>
+        </Table>
+      </Box>
+
+    <CardFooter borderTopWidth={'1px'} justifyContent="center" p={2}>
+        <Flex
+         
+          bg={bgColor}
+          width={'100%'}
+          boxShadow="sm" 
+          borderRadius="3px" 
+          p={2}
+          >
+            <LinkInternal fontSize="sm"  width={'100%'} 
+            color={textColor}
+            textAlign={'center'} href={ route({ pathname: '/blocks' }) }>View all blocks</LinkInternal>
         </Flex>
+    </CardFooter>
       </>
     );
   }
 
   return (
-    <Box width={{ base: '100%', lg: '280px' }} flexShrink={ 0 }>
-      <Heading as="h4" size="sm">Latest blocks</Heading>
+    <Card  
+        
+        width={{ base: '100%', lg: '50%' }} 
+        // flexShrink={ 0 }
+        borderWidth="1px"           
+        borderRadius="md"           
+        boxShadow="md"    
+        borderColor={borderTheme}         
+        // p={3}   
+                
+      >
+         <CardHeader borderBottomWidth={'1px'}>
+          <Heading as="h5" size="14px" fontWeight={'bold'}>Latest blocks</Heading>
+         </CardHeader>     
       { statsQueryResult.data?.network_utilization_percentage !== undefined && (
         <Skeleton isLoaded={ !statsQueryResult.isPlaceholderData } mt={ 1 } display="inline-block">
           <Text as="span" fontSize="sm">
@@ -117,7 +169,7 @@ const LatestBlocks = () => {
       <Box mt={ 3 }>
         { content }
       </Box>
-    </Box>
+    </Card>
   );
 };
 

@@ -40,11 +40,11 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
     return (
       <Flex className={ className } flexDir="column" rowGap={ 3 }>
         <Flex alignItems="center" columnGap={ 2 }>
-          <AddressFromToIcon
+          {/* <AddressFromToIcon
             isLoading={ isLoading }
             type={ getTxCourseType(from.hash, to?.hash, current) }
             transform="rotate(90deg)"
-          />
+          /> */}
           <Entity
             address={ from }
             isLoading={ isLoading }
@@ -52,7 +52,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
             noCopy={ current === from.hash }
             noIcon={ noIcon }
             tokenHash={ tokenHash }
-            truncation="constant"
+            truncation="tail"
             maxW="calc(100% - 28px)"
             w="min-content"
 
@@ -66,10 +66,10 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
             noCopy={ current === to.hash }
             noIcon={ noIcon }
             tokenHash={ tokenHash }
-            truncation="constant"
+            truncation="tail"
             maxW="calc(100% - 28px)"
             w="min-content"
-            ml="28px"
+            // ml="28px"
           />
         ) }
       </Flex>
@@ -90,6 +90,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
         tokenHash={ tokenHash }
         truncation="constant"
         mr={ isOutgoing ? 4 : 2 }
+        fontSize="14px" 
       />
       <AddressFromToIcon
         isLoading={ isLoading }
@@ -105,6 +106,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
           tokenHash={ tokenHash }
           truncation="constant"
           ml={ 3 }
+          
         />
       ) }
     </Grid>
