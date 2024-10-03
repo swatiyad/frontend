@@ -35,34 +35,39 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
     <Grid
       gridTemplateColumns={{
         lg: columnNum === 2 ? '3fr minmax(auto, 180px)' : '3fr minmax(auto, 180px) 170px',
-        xl: columnNum === 2 ? '3fr minmax(auto, 250px)' : '3fr minmax(auto, 275px) 170px',
+        xl: columnNum === 2 ? '3fr minmax(auto, 250px)' : '3fr minmax(auto, 200px) 170px',
       }}
       gridGap={ 8 }
-      width="100%"
-      minW="700px"
-      borderTop="1px solid"
-      borderColor="divider"
-      p={ 4 }
+      // width="100%"
+      // minW="700px"
+      // borderTop="1px solid"
+      // borderColor="divider"
+      p={ 3 }
       _last={{ borderBottom: '1px solid', borderColor: 'divider' }}
       display={{ base: 'none', lg: 'grid' }}
     >
       <Flex overflow="hidden" w="100%">
-        <TxAdditionalInfo tx={ tx } isLoading={ isLoading } my="3px"/>
-        <Box ml={ 3 } w="calc(100% - 40px)">
+        {/* <TxAdditionalInfo tx={ tx } isLoading={ isLoading } my="3px"/> */}
+        <Box
+        //  ml={ 3 } 
+        w="calc(100% - 40px)"
+        >
           <HStack flexWrap="wrap" my="3px">
-            <TxType types={ tx.tx_types } isLoading={ isLoading }/>
-            <TxStatus status={ tx.status } errorText={ tx.status === 'error' ? tx.result : undefined } isLoading={ isLoading }/>
-            <TxWatchListTags tx={ tx } isLoading={ isLoading }/>
+            {/* <TxType types={ tx.tx_types } isLoading={ isLoading }/> */}
+            {/* <TxStatus status={ tx.status } errorText={ tx.status === 'error' ? tx.result : undefined } isLoading={ isLoading }/> */}
+            {/* <TxWatchListTags tx={ tx } isLoading={ isLoading }/> */}
           </HStack>
-          <Flex
-            alignItems="center"
+         
+          <Flex flexDir="column"
+            // alignItems="center"
             mt="7px"
             mb="3px"
           >
             <TxEntity
               isLoading={ isLoading }
               hash={ tx.hash }
-              fontWeight="700"
+              // fontWeight="700"
+              fontSize="14px" 
             />
             <TimeAgoWithTooltip
               timestamp={ tx.timestamp }
@@ -86,14 +91,14 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
       <Flex flexDir="column">
         { !config.UI.views.tx.hiddenFields?.value && (
           <Skeleton isLoaded={ !isLoading } my="3px">
-            <Text as="span" whiteSpace="pre">Value </Text>
-            <Text as="span" variant="secondary">{ getValueWithUnit(tx.value).dp(5).toFormat() } { currencyUnits.ether }</Text>
+            <Text as="span" whiteSpace="pre" fontSize="14px">Value </Text>
+            <Text as="span" variant="secondary" fontSize="14px">{ getValueWithUnit(tx.value).dp(5).toFormat() } { currencyUnits.ether }</Text>
           </Skeleton>
         ) }
         { !config.UI.views.tx.hiddenFields?.tx_fee && (
           <Skeleton isLoaded={ !isLoading } display="flex" whiteSpace="pre" my="3px">
-            <Text as="span">Fee </Text>
-            <TxFee tx={ tx } accuracy={ 5 } color="text_secondary"/>
+            <Text as="span" fontSize="14px">Fee </Text>
+            <TxFee tx={ tx } accuracy={ 5 } color="text_secondary" fontSize="14px"/>
           </Skeleton>
         ) }
       </Flex>

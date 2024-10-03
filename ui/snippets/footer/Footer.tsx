@@ -1,7 +1,11 @@
 import type { GridProps, HTMLChakraProps } from '@chakra-ui/react';
-import { Box, Grid, Flex, Text, Link, VStack, Skeleton, useColorModeValue } from '@chakra-ui/react';
+import { Box, Grid, Flex, Text, Link, VStack, Skeleton, useColorModeValue, Image, Icon } from '@chakra-ui/react';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
+import React, { useState } from 'react';
+import telegram from 'icons/social/telega.svg';
+import facebook from 'icons/social/facebook_filled.svg';
+import twitter from 'icons/social/twitter.svg';
+import upArrow from 'icons/arrows/up-head.svg';
 
 import type { CustomLinksGroup } from 'types/footerLinks';
 
@@ -19,12 +23,20 @@ import FooterLinkItem from './FooterLinkItem';
 import IntTxsIndexingStatus from './IntTxsIndexingStatus';
 import getApiVersionUrl from './utils/getApiVersionUrl';
 
-const MAX_LINKS_COLUMNS = 4;
+const MAX_LINKS_COLUMNS = 3;
 
 const FRONT_VERSION_URL = `https://github.com/blockscout/frontend/tree/${ config.UI.footer.frontendVersion }`;
 const FRONT_COMMIT_URL = `https://github.com/blockscout/frontend/commit/${ config.UI.footer.frontendCommit }`;
 
+
 const Footer = () => {
+  
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   const { data: backendVersionData } = useApiQuery('config_backend_version', {
     queryOptions: {
@@ -33,50 +45,31 @@ const Footer = () => {
   });
   const apiVersionUrl = getApiVersionUrl(backendVersionData?.backend_version);
   const issueUrl = useIssueUrl(backendVersionData?.backend_version);
-  const logoColor = useColorModeValue('blue.600', 'white');
 
-  const BLOCKSCOUT_LINKS = [
+  const logoColor = useColorModeValue('blue.600', 'white');
+  const iconColor = useColorModeValue('black', 'white');
+
+  const BLOCKSCOUT_LINK_GROUPS = [
     {
-      icon: 'edit' as const,
-      iconSize: '16px',
-      text: 'Submit an issue',
-      url: issueUrl,
+      title: 'Company',
+      links: [
+        { text: 'Community Website', url: 'https://dsclab.ai/' },
+        { text: 'Terms of Service', url: '#' },
+      ],
     },
     {
-      icon: 'social/canny' as const,
-      iconSize: '20px',
-      text: 'Feature request',
-      url: 'https://blockscout.canny.io/feature-requests',
+      title: 'Resources',
+      links: [
+        { text: 'Contribute', url: 'https://github.com/blockscout/blockscout' },
+        { text: 'Newsletter', url: '#' },
+      ],
     },
+   
     {
-      icon: 'social/git' as const,
-      iconSize: '18px',
-      text: 'Contribute',
-      url: 'https://github.com/blockscout/blockscout',
-    },
-    {
-      icon: 'social/twitter' as const,
-      iconSize: '18px',
-      text: 'X (ex-Twitter)',
-      url: 'https://www.twitter.com/blockscoutcom',
-    },
-    {
-      icon: 'social/discord' as const,
-      iconSize: '24px',
-      text: 'Discord',
-      url: 'https://discord.gg/blockscout',
-    },
-    {
-      icon: 'brands/blockscout' as const,
-      iconSize: '18px',
-      text: 'All chains',
-      url: 'https://www.blockscout.com/chains-and-projects',
-    },
-    {
-      icon: 'donate' as const,
-      iconSize: '20px',
-      text: 'Donate',
-      url: 'https://github.com/sponsors/blockscout',
+      title: 'Products & Services',
+      links: [
+        { text: 'Blockscan Chat', url: '#' },
+      ],
     },
   ];
 
@@ -90,7 +83,7 @@ const Footer = () => {
     }
 
     return null;
-  })();
+  })();9
 
   const fetch = useFetch();
 
@@ -104,39 +97,58 @@ const Footer = () => {
 
   const colNum = isPlaceholderData ? 1 : Math.min(linksData?.length || Infinity, MAX_LINKS_COLUMNS) + 1;
 
-  const renderNetworkInfo = React.useCallback((gridArea?: GridProps['gridArea']) => {
-    return (
-      <Flex
-        gridArea={ gridArea }
-        flexWrap="wrap"
-        columnGap={ 8 }
-        rowGap={ 6 }
-        mb={{ base: 5, lg: 10 }}
-        _empty={{ display: 'none' }}
-      >
-        { !config.UI.indexingAlert.intTxs.isHidden && <IntTxsIndexingStatus/> }
-        <NetworkAddToWallet/>
-      </Flex>
-    );
-  }, []);
+  // const renderNetworkInfo = React.useCallback((gridArea?: GridProps['gridArea']) => {
+  //   return (
+  //     <Flex
+  //       gridArea={ gridArea }
+  //       flexWrap="wrap"
+  //       columnGap={ 8 }
+  //       rowGap={ 6 }
+  //       mb={{ base: 5, lg: 10 }}
+  //       _empty={{ display: 'none' }}
+  //     >
+  //       { !config.UI.indexingAlert.intTxs.isHidden && <IntTxsIndexingStatus/> }
+  //       <NetworkAddToWallet/>
+  //     </Flex>
+  //   );
+  // }, []);
 
   const renderProjectInfo = React.useCallback((gridArea?: GridProps['gridArea']) => {
     return (
-      <Box gridArea={ gridArea }>
-        <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 5 } alignItems="center" color="text">
+      <Box 
+      // gridArea={ gridArea }
+      >
+        {/* <Flex columnGap={ 2 } fontSize="xs" lineHeight={ 5 } alignItems="center" color="text">
           <span>Made with</span>
-          <Link href="https://www.blockscout.com" isExternal display="inline-flex" color={ logoColor } _hover={{ color: logoColor }}>
+          <Link href="#" isExternal display="inline-flex" color={ logoColor } _hover={{ color: logoColor }}>
             <IconSvg
               name="networks/logo-placeholder"
               width="80px"
               height={ 4 }
             />
           </Link>
-        </Flex>
+        </Flex> */}
+
+          <Flex columnGap={ 2 } lineHeight={ 5 } alignItems="center" color="text">
+          
+          <Link href="#" isExternal display="inline-flex" color={ logoColor } _hover={{ color: logoColor }}>          
+            <Image
+                src="https://dscscan.io/images/dscscanlogo.png" 
+                alt="DSC Chain Logo" 
+                width="40px" 
+                height="auto"
+               
+              />            
+          </Link>
+          <Text fontSize="18px" lineHeight="5" ml={2}>Powered by DSC Chain</Text>
+        </Flex> 
+        <Box mt={ 3 }>
+          <NetworkAddToWallet />
+        </Box>
         <Text mt={ 3 } fontSize="xs">
-          Blockscout is a tool for inspecting and analyzing EVM based blockchains. Blockchain explorer for Ethereum Networks.
+        Dscscan is a Block Explorer and Analytics Platform for DSC chain, a decentralized smart contracts platform.
         </Text>
-        <Box mt={ 6 } alignItems="start" fontSize="xs" lineHeight={ 5 }>
+        {/* <Box mt={ 6 } alignItems="start" fontSize="xs" lineHeight={ 5 }>
           { apiVersionUrl && (
             <Text>
               Backend: <Link href={ apiVersionUrl } target="_blank">{ backendVersionData?.backend_version }</Link>
@@ -150,10 +162,10 @@ const Footer = () => {
           <Text>
             Copyright { copy } Blockscout Limited 2023-{ (new Date()).getFullYear() }
           </Text>
-        </Box>
+        </Box> */}
       </Box>
     );
-  }, [ apiVersionUrl, backendVersionData?.backend_version, frontendLink, logoColor ]);
+  }, [logoColor ]);
 
   const containerProps: HTMLChakraProps<'div'> = {
     as: 'footer',
@@ -161,50 +173,56 @@ const Footer = () => {
     borderTopColor: 'solid',
   };
 
-  const contentProps: GridProps = {
-    px: { base: 4, lg: config.UI.navigation.layout === 'horizontal' ? 6 : 12, '2xl': 6 },
+  // const contentProps: GridProps = {
+  //   px: { base: 4, lg: config.UI.navigation.layout === 'horizontal' ? 6 : 12, '2xl': 6 },
+  //   py: { base: 4, lg: 8 },
+  //   gridTemplateColumns: { base: '1fr', lg: 'minmax(auto, 470px) 1fr' },
+  //   columnGap: { lg: '32px', xl: '100px' },
+  //   maxW: `${ CONTENT_MAX_WIDTH }px`,
+  //   m: '0 auto',
+  // };
+
+  const contentProps = {
+    // px: { base: 4, lg: 12 },
     py: { base: 4, lg: 8 },
-    gridTemplateColumns: { base: '1fr', lg: 'minmax(auto, 470px) 1fr' },
+    gridTemplateColumns: { base: '1fr', lg: '1fr 2fr' },
     columnGap: { lg: '32px', xl: '100px' },
-    maxW: `${ CONTENT_MAX_WIDTH }px`,
+    maxW: '1450px',
     m: '0 auto',
   };
 
   if (config.UI.footer.links) {
     return (
-      <Box { ...containerProps }>
+      // <Box { ...containerProps }>
+      <Box as="footer" borderTopWidth="1px" borderTopColor="solid">
         <Grid { ...contentProps }>
           <div>
-            { renderNetworkInfo() }
+            {/* { renderNetworkInfo() } */}
             { renderProjectInfo() }
           </div>
-
+          {/* Right side: Menu Links in 3 columns */}
+          
           <Grid
-            gap={{ base: 6, lg: colNum === MAX_LINKS_COLUMNS + 1 ? 2 : 8, xl: 12 }}
-            gridTemplateColumns={{
-              base: 'repeat(auto-fill, 160px)',
-              lg: `repeat(${ colNum }, 135px)`,
-              xl: `repeat(${ colNum }, 160px)`,
-            }}
-            justifyContent={{ lg: 'flex-end' }}
-            mt={{ base: 8, lg: 0 }}
-          >
-            {
-              ([
-                { title: 'Blockscout', links: BLOCKSCOUT_LINKS },
-                ...(linksData || []),
-              ])
-                .slice(0, colNum)
-                .map(linkGroup => (
-                  <Box key={ linkGroup.title }>
-                    <Skeleton fontWeight={ 500 } mb={ 3 } display="inline-block" isLoaded={ !isPlaceholderData }>{ linkGroup.title }</Skeleton>
-                    <VStack spacing={ 1 } alignItems="start">
-                      { linkGroup.links.map(link => <FooterLinkItem { ...link } key={ link.text } isLoading={ isPlaceholderData }/>) }
-                    </VStack>
-                  </Box>
-                ))
-            }
-          </Grid>
+          gap={{ base: 6, lg: 8, xl: 12 }}
+          gridTemplateColumns={{ base: 'repeat(3, 1fr)' }} 
+          justifyContent="flex-end"
+          mt={{ base: 8, lg: 0 }}
+        >
+          {BLOCKSCOUT_LINK_GROUPS.map((linkGroup) => (
+            <Box key={linkGroup.title}>
+              <Text fontWeight={500} mb={3}>
+                {linkGroup.title}
+              </Text>
+              <VStack spacing={1} alignItems="start">
+                {linkGroup.links.map((link) => (
+                  <FooterLinkItem key={link.text} text={link.text} url={link.url} />
+                ))}
+              </VStack>
+            </Box>
+          ))}
+        </Grid>
+
+          
         </Grid>
       </Box>
     );
@@ -212,39 +230,61 @@ const Footer = () => {
 
   return (
     <Box { ...containerProps }>
+      <Flex justifyContent="space-between" alignItems="center" mb={6} py={3} >
+       {/* Social Media Links */}
+       <Flex>
+          <Link href="https://t.me/dscblockchainsupport" isExternal>
+            <Icon as={ telegram } color= {iconColor} mr={ 1 } ml="6px" w="23px" h="20px" display="inline-block" verticalAlign="middle"/>
+          </Link>
+          <Link href="https://www.instagram.com/dscblockchain?igsh=MW8xdTdrbnBhOWRkYw==" isExternal>
+            <Icon as={ facebook } color= {iconColor} mr={ 1 } ml="6px" w="23px" h="20px" display="inline-block" verticalAlign="middle"/>
+          </Link>
+          <Link href="https://x.com/DSC_Blockchain" isExternal>
+            <Icon as={ twitter } color= {iconColor} mr={ 1 } ml="6px" w="23px" h="20px" display="inline-block" verticalAlign="middle"/>
+          </Link>
+        </Flex>
+      
+         <Link onClick={scrollToTop} fontSize="sm" fontWeight="bold" color={logoColor} _hover={{ textDecoration: 'underline' }}>
+        
+         <Text color= {iconColor}>  <Icon as={ upArrow } mr={ 1 } ml="6px" w="23px" h="20px" display="inline-block" verticalAlign="middle"/>  Back to Top </Text>
+        </Link>
+      </Flex>
       <Grid
         { ...contentProps }
-        gridTemplateAreas={{
-          lg: `
-          "network links-top"
-          "info links-bottom"
-        `,
-        }}
+        // gridTemplateAreas={{
+        //   lg: `
+        //   "network links-top"
+        //   "info links-bottom"
+        // `,
+        // }}
       >
 
-        { renderNetworkInfo({ lg: 'network' }) }
+        {/* { renderNetworkInfo({ lg: 'network' }) } */}
         { renderProjectInfo({ lg: 'info' }) }
 
         <Grid
-          gridArea={{ lg: 'links-bottom' }}
-          gap={ 1 }
+          gap={{ base: 6, lg: colNum === MAX_LINKS_COLUMNS + 1 ? 2 : 8, xl: 12 }}
           gridTemplateColumns={{
             base: 'repeat(auto-fill, 160px)',
-            lg: 'repeat(3, 160px)',
-            xl: 'repeat(4, 160px)',
-          }}
-          gridTemplateRows={{
-            base: 'auto',
-            lg: 'repeat(3, auto)',
-            xl: 'repeat(2, auto)',
-          }}
-          gridAutoFlow={{ base: 'row', lg: 'column' }}
-          alignContent="start"
-          justifyContent={{ lg: 'flex-end' }}
-          mt={{ base: 8, lg: 0 }}
-        >
-          { BLOCKSCOUT_LINKS.map(link => <FooterLinkItem { ...link } key={ link.text }/>) }
-        </Grid>
+            lg: 'repeat(3, 135px)',
+            xl: 'repeat(3, 160px)',
+           }}
+            justifyContent={{ lg: 'flex-end' }}
+            mt={{ base: 8, lg: 0 }}
+          >
+            { 
+              BLOCKSCOUT_LINK_GROUPS.map((linkGroup) => (
+                <Box key={linkGroup.title}>
+                  <Text fontWeight={500} mb={3}>{linkGroup.title}</Text>
+                  <VStack spacing={1} alignItems="start">
+                    {linkGroup.links.map(link => (
+                      <FooterLinkItem key={link.text} text={link.text} url={link.url} />
+                    ))}
+                  </VStack>
+                </Box>
+              ))
+            }
+          </Grid>
       </Grid>
     </Box>
   );

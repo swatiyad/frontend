@@ -17,6 +17,7 @@ const MainArea = ({ children, className }: Props) => {
   return (
     <Flex
       className={ className }
+      direction="column" // Use column direction for main content
       w="100%"
       maxW={ `${ CONTENT_MAX_WIDTH }px` }
       m="0 auto"

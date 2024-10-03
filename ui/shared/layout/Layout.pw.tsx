@@ -28,7 +28,7 @@ test.describe('xxl screen', () => {
 
   test('horizontal navigation', async({ render, mockEnvs }) => {
     await mockEnvs([
-      [ 'NEXT_PUBLIC_NAVIGATION_LAYOUT', 'horizontal' ],
+      [ 'NEXT_PUBLIC_NAVIGATION_LAYOUT', 'horizontal' ],     
     ]);
     const component = await render(<Layout>Page Content</Layout>);
     await expect(component).toHaveScreenshot();
