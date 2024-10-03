@@ -82,7 +82,8 @@ const LatestBlocks = () => {
   if (isError) {
     content = <Text>No data. Please reload the page.</Text>;
   }
-  const borderTheme = useColorModeValue('#eee', '#333');
+  const cardBg = useColorModeValue('#fff', 'whiteAlpha.100');
+  const borderTheme = useColorModeValue('#eee', 'whiteAlpha.100');
   if (data) {
     const dataToShow = data.slice(0, blocksMaxCount);
     const bgColor = useColorModeValue('#E9EAEC', 'black');
@@ -143,7 +144,8 @@ const LatestBlocks = () => {
         borderWidth="1px"           
         borderRadius="md"           
         boxShadow="md"    
-        borderColor={borderTheme}         
+        borderColor={borderTheme}   
+        bgColor={cardBg}         
         // p={3}   
                 
       >

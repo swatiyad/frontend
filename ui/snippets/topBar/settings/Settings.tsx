@@ -27,7 +27,7 @@ const Settings = () => {
         <PopoverBody boxShadow="2xl" p={ 4 }>
           <SettingsColorTheme onSelect={ onClose }/>
           <Box borderColor="divider" borderWidth="1px" my={ 3 }/>
-          <SettingsIdentIcon/>
+          {/* <SettingsIdentIcon/> */}
         </PopoverBody>
       </PopoverContent>
     </Popover>

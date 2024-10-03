@@ -102,7 +102,9 @@ const LatestBlocksItem = ({ block, isLoading }: Props) => {
             </Skeleton>
           </Td> */}
           <Td>
-           <HStack gap={'0.2rem'}> <Text fontSize={'14px'}>Fee Recipient</Text>
+           <HStack gap={'0.2rem'}> 
+           <Skeleton isLoaded={!isLoading}>
+            <Text fontSize={'14px'}>Fee Recipient</Text>
          
          <AddressEntity
            address={block.miner}
@@ -112,10 +114,10 @@ const LatestBlocksItem = ({ block, isLoading }: Props) => {
            truncation="constant"
            fontSize={'14px'}
          />
-          <Skeleton isLoaded={!isLoading}> </Skeleton></HStack>
+           </Skeleton></HStack>
          
        
-        <Text fontSize="14px">{block.tx_count} txns</Text> <Skeleton isLoaded={!isLoading}> </Skeleton>
+         <Skeleton isLoaded={!isLoading}> <Text fontSize="14px">{block.tx_count} txns</Text></Skeleton>
           </Td>
 
           <Td textAlign="right">

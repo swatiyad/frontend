@@ -34,14 +34,16 @@ const TransactionsHome = () => {
       </>
     );
   }
-  const borderTheme = useColorModeValue('#eee', '#333');
+  const cardBg = useColorModeValue('#fff', 'whiteAlpha.100');
+  const borderTheme = useColorModeValue('#eee', 'whiteAlpha.100');
   return (
     <>
       <Card
       borderWidth="1px"           
       borderRadius="md"           
       boxShadow="md"
-      borderColor={borderTheme}             
+      borderColor={borderTheme} 
+      bgColor={cardBg}            
       // p={4}
       flexShrink={0}
       // width={'50%'}
