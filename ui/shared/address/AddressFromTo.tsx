@@ -55,6 +55,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
             truncation="tail"
             maxW="calc(100% - 28px)"
             w="min-content"
+            fontSize="14px" 
 
           />
         </Flex>
@@ -70,6 +71,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
             maxW="calc(100% - 28px)"
             w="min-content"
             // ml="28px"
+            fontSize="14px" 
           />
         ) }
       </Flex>
@@ -106,7 +108,7 @@ const AddressFromTo = ({ from, to, current, mode: modeProp, className, isLoading
           tokenHash={ tokenHash }
           truncation="constant"
           ml={ 3 }
-          
+          fontSize="14px"           
         />
       ) }
     </Grid>

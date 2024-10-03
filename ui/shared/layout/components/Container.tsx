@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Container = ({ children, className }: Props) => {
-  const bgColor = useColorModeValue('white', 'black');
+  const bgColor = useColorModeValue('#fff', 'black');
 
   return (
     <ChakraContainer
@@ -17,7 +17,6 @@ const Container = ({ children, className }: Props) => {
       bgColor={bgColor}
       padding={0}
       // maxW='1450px' centerContent
-    
     >
       {children}
     </ChakraContainer>
