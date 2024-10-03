@@ -77,7 +77,7 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
               fontWeight="400"
               fontSize="sm"
               flexShrink={ 0 }
-              ml={ 2 }
+              ml={7}
             />
           </Flex>
         </Box>
@@ -92,7 +92,9 @@ const LatestTxsItem = ({ tx, isLoading }: Props) => {
         { !config.UI.views.tx.hiddenFields?.value && (
           <Skeleton isLoaded={ !isLoading } my="3px">
             <Text as="span" whiteSpace="pre" fontSize="14px">Value </Text>
-            <Text as="span" variant="secondary" fontSize="14px">{ getValueWithUnit(tx.value).dp(5).toFormat() } { currencyUnits.ether }</Text>
+            <Text as="span" variant="secondary" fontSize="14px">
+              { getValueWithUnit(tx.value).dp(5).toFormat() } { currencyUnits.ether }
+            </Text>
           </Skeleton>
         ) }
         { !config.UI.views.tx.hiddenFields?.tx_fee && (

@@ -10,6 +10,7 @@ import {
   Tooltip,
   Text,
   useColorModeValue,
+  HStack,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
@@ -43,7 +44,7 @@ const LatestBlocksItem = ({ block, isLoading }: Props) => {
       // borderRadius="md"
       // border="1px solid"
       // borderColor="divider"
-      p={ 3 }
+      p={ 2 }
       >
       <Td>
         <BlockEntity
@@ -67,6 +68,7 @@ const LatestBlocksItem = ({ block, isLoading }: Props) => {
           fontWeight={400}
           display="inline-block"
           fontSize="sm"
+          ml={7}
         />
       </Td>
       {/* <Td>
@@ -100,20 +102,20 @@ const LatestBlocksItem = ({ block, isLoading }: Props) => {
             </Skeleton>
           </Td> */}
           <Td>
-            <Text>Fee Recipient</Text>
+           <HStack gap={'0.2rem'}> <Text fontSize={'14px'}>Fee Recipient</Text>
          
-            <AddressEntity
-              address={block.miner}
-              isLoading={isLoading}
-              noIcon
-              noCopy
-              truncation="constant"
-              fontSize={'14px'}
-            />
-             <Skeleton isLoaded={!isLoading}> 
+         <AddressEntity
+           address={block.miner}
+           isLoading={isLoading}
+           noIcon
+           noCopy
+           truncation="constant"
+           fontSize={'14px'}
+         />
+          <Skeleton isLoaded={!isLoading}> </Skeleton></HStack>
          
        
-        <Text fontSize="14px">{block.tx_count} txns</Text></Skeleton>
+        <Text fontSize="14px">{block.tx_count} txns</Text> <Skeleton isLoaded={!isLoading}> </Skeleton>
           </Td>
 
           <Td textAlign="right">
